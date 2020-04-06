@@ -6,7 +6,7 @@ import com.google.jenkins.plugins.credentials.oauth.GoogleRobotPrivateKeyCredent
 import com.google.jenkins.plugins.credentials.oauth.GoogleRobotPrivateKeyCredentials.PrivateKeyNotSetException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang.exception.ExceptionUtils;
-
+import hudson.model.Item;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -28,10 +28,10 @@ public class CredentialsHandler {
 
     /** @return The Google API credentials configured for this job. */
     @SuppressFBWarnings("VA_FORMAT_STRING_USES_NEWLINE")
-    public final GoogleRobotCredentials getServiceAccountCredentials() throws UploadException {
+    public final GoogleRobotCredentials getServiceAccountCredentials(Item item) throws UploadException {
         try {
             GoogleOAuth2ScopeRequirement req = new AndroidPublisherScopeRequirement();
-            GoogleRobotCredentials credentials = GoogleRobotCredentials.getById(googleCredentialsId);
+            GoogleRobotCredentials credentials = GoogleRobotCredentials.getById(googleCredentialsId, item);
             if (credentials == null) {
                 throw new CredentialsException(String.format("The Google Service Account credential '%s' "
                         + "could not be found.%n\tIf you renamed the credential since configuring this job, you must "
